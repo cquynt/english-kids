@@ -64,10 +64,16 @@ const SFX = {
 
 // ── Speech Synthesis (Google Translate TTS) ──
 let currentAudio = null;
+let repeatTimeout = null;
+
 function speak(text) {
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.currentTime = 0;
+  }
+  if (repeatTimeout) {
+    clearTimeout(repeatTimeout);
+    repeatTimeout = null;
   }
   
   // tl=en-GB ensures a British English accent
@@ -76,6 +82,14 @@ function speak(text) {
   
   currentAudio = new Audio(url);
   currentAudio.play().catch(e => console.error('Audio playback failed:', e));
+  
+  currentAudio.onended = () => {
+    currentAudio.onended = null; // Only repeat once
+    repeatTimeout = setTimeout(() => {
+      currentAudio.currentTime = 0;
+      currentAudio.play().catch(e => console.error('Audio replay failed:', e));
+    }, 2000);
+  };
 }
 
 // ── Dark Mode ──
