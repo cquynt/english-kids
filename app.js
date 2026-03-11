@@ -82,14 +82,21 @@ function speak(text) {
   const url = `https://dict.youdao.com/dictvoice?audio=${encodedText}&type=1`;
   
   currentAudio = new Audio(url);
+  let playCount = 1;
+  const maxPlays = 3; // Lặp lại để nghe tổng cộng 3 lần
+
   currentAudio.play().catch(e => console.error('Audio playback failed:', e));
   
   currentAudio.onended = () => {
-    currentAudio.onended = null; // Only repeat once
-    repeatTimeout = setTimeout(() => {
-      currentAudio.currentTime = 0;
-      currentAudio.play().catch(e => console.error('Audio replay failed:', e));
-    }, 2000);
+    if (playCount < maxPlays) {
+      playCount++;
+      repeatTimeout = setTimeout(() => {
+        currentAudio.currentTime = 0;
+        currentAudio.play().catch(e => console.error('Audio replay failed:', e));
+      }, 1000); // Cách nhau 1s
+    } else {
+      currentAudio.onended = null;
+    }
   };
 }
 
