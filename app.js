@@ -62,22 +62,20 @@ const SFX = {
   }
 };
 
-// ── Speech Synthesis ──
+// ── Speech Synthesis (Google Translate TTS) ──
+let currentAudio = null;
 function speak(text) {
-  if (!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'en-GB';
-  u.rate = 0.85;
-  u.pitch = 1.1;
-  const voices = window.speechSynthesis.getVoices();
-  const enVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Female'))
-    || voices.find(v => v.lang.startsWith('en'));
-  if (enVoice) u.voice = enVoice;
-  window.speechSynthesis.speak(u);
-}
-if ('speechSynthesis' in window) {
-  window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+  }
+  
+  // tl=en-GB ensures a British English accent
+  const encodedText = encodeURIComponent(text);
+  const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-GB&q=${encodedText}`;
+  
+  currentAudio = new Audio(url);
+  currentAudio.play().catch(e => console.error('Audio playback failed:', e));
 }
 
 // ── Dark Mode ──
