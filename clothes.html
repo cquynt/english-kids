@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn clothing vocabulary in English with fun flashcards, matching games, memory game and quizzes!">
+  <title>Clothes – English Kids 👕</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👕</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html" id="nav-numbers">🔢 Numbers</a>
+        <a href="clothes.html" class="active" id="nav-clothes">👕 Clothes</a>
+        <a href="hobbies.html" id="nav-hobbies">⚽ Hobbies</a>
+        <a href="toys.html">🧸 Toys</a>
+        <a href="colors.html">🎨 Colours</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">👕</div>
+    <h1>Clothes</h1>
+    <p>Learn the names of clothes in English! Click a card to hear the word 🔊</p>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="match" id="tab-match">🎯 Match</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="clothes-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="match">
+    <div id="clothes-match"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="clothes-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="clothes-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    const CLOTHES = [
+      { word: 'jeans',       emoji: '👖', german: 'Jeans' },
+      { word: 'pullover',    emoji: '🧶', german: 'Pullover' },
+      { word: 'dress',       emoji: '👗', german: 'Kleid' },
+      { word: 'jacket',      emoji: '🧥', german: 'Jacke' },
+      { word: 'shoes',       emoji: '👞', german: 'Schuhe' },
+      { word: 'T-shirt',     emoji: '👕', german: 'T-Shirt' },
+      { word: 'boots',       emoji: '🥾', german: 'Stiefel' },
+      { word: 'trainers',    emoji: '👟', german: 'Turnschuhe' },
+      { word: 'cap',         emoji: '🧢', german: 'Kappe' },
+      { word: 'skirt',       emoji: '👗', german: 'Rock' },
+      { word: 'trousers',    emoji: '👖', german: 'Hose' },
+      { word: 'blouse',      emoji: '👚', german: 'Bluse' },
+      { word: 'socks',       emoji: '🧦', german: 'Socken' },
+      { word: 'flip-flops',  emoji: '🩴', german: 'Flip-Flops' },
+      { word: 'gloves',      emoji: '🧤', german: 'Handschuhe' },
+      { word: 'hat',         emoji: '🎩', german: 'Hut' },
+      { word: 'sandals',     emoji: '👡', german: 'Sandalen' },
+      { word: 'scarf',       emoji: '🧣', german: 'Schal' },
+      { word: 'shorts',      emoji: '🩳', german: 'kurze Hose' },
+      { word: 'umbrella',    emoji: '☂️', german: 'Regenschirm' },
+    ];
+
+    // ── Flashcards ──
+    const fcContainer = document.getElementById('clothes-flashcards');
+    CLOTHES.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${c.word}')">🔊</button>
+        <div class="fc-emoji">${c.emoji}</div>
+        <div class="fc-word">${c.word}</div>
+        <div class="fc-sub">${c.german}</div>
+      `;
+      card.addEventListener('click', () => { speak(c.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Matching Game ──
+    const matchPairs = shuffle(CLOTHES).slice(0, 8).map(c => ({
+      left: c.emoji,
+      right: c.word
+    }));
+    new MatchGame({
+      containerId: 'clothes-match',
+      pairs: matchPairs,
+      topic: 'clothes'
+    });
+
+    // ── Memory Game ──
+    const memPairs = shuffle(CLOTHES).slice(0, 6).map(c => ({
+      emoji: c.emoji,
+      word: c.word
+    }));
+    new MemoryGame({
+      containerId: 'clothes-memory',
+      pairs: memPairs,
+      topic: 'clothes'
+    });
+
+    // ── Quiz ──
+    function buildClothesQuestions() {
+      const qs = [];
+      const picked = shuffle(CLOTHES).slice(0, 10);
+      picked.slice(0, 5).forEach(c => {
+        const wrongs = shuffle(CLOTHES.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([c.word, ...wrongs]);
+        qs.push({
+          prompt: 'Which clothing item is this?',
+          question: c.emoji,
+          options: opts,
+          correct: opts.indexOf(c.word)
+        });
+      });
+      picked.slice(5, 10).forEach(c => {
+        const wrongs = shuffle(CLOTHES.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.german);
+        const opts = shuffle([c.german, ...wrongs]);
+        qs.push({
+          prompt: `What is "${c.word}" in German?`,
+          question: `${c.emoji} ${c.word}`,
+          options: opts,
+          correct: opts.indexOf(c.german)
+        });
+      });
+      return shuffle(qs);
+    }
+
+    new QuizEngine({
+      containerId: 'clothes-quiz',
+      questions: buildClothesQuestions(),
+      topic: 'clothes'
+    });
+  </script>
+</body>
+</html>

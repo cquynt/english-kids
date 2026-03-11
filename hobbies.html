@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn hobby vocabulary in English with fun flashcards, sentence building, memory game and quizzes!">
+  <title>Hobbies – English Kids ⚽</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html" id="nav-numbers">🔢 Numbers</a>
+        <a href="clothes.html" id="nav-clothes">👕 Clothes</a>
+        <a href="hobbies.html" class="active" id="nav-hobbies">⚽ Hobbies</a>
+        <a href="toys.html">🧸 Toys</a>
+        <a href="colors.html">🎨 Colours</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">⚽</div>
+    <h1>Hobbies</h1>
+    <p>Learn to talk about your hobbies in English! Click a card to hear the word 🔊</p>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="sentences" id="tab-sentences">💬 Sentences</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="hobbies-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="sentences">
+    <div id="hobbies-sentences"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="hobbies-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="hobbies-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    const HOBBIES = [
+      { word: 'playing football',      emoji: '⚽', german: 'Fußball spielen',       sentence: 'My favourite hobby is playing football.' },
+      { word: 'playing a computer game', emoji: '🎮', german: 'Computerspiel spielen', sentence: 'My favourite hobby is playing a computer game.' },
+      { word: 'dancing',               emoji: '💃', german: 'Tanzen',                sentence: 'My favourite hobby is dancing.' },
+      { word: 'in-line skating',       emoji: '⛸️', german: 'Inlineskaten',           sentence: 'My favourite hobby is in-line skating.' },
+      { word: 'listening to music',    emoji: '🎧', german: 'Musik hören',           sentence: 'My favourite hobby is listening to music.' },
+      { word: 'reading',               emoji: '📖', german: 'Lesen',                 sentence: 'My favourite hobby is reading.' },
+      { word: 'riding a bike',         emoji: '🚴', german: 'Rad fahren',            sentence: 'My favourite hobby is riding a bike.' },
+      { word: 'running',               emoji: '🏃', german: 'Laufen',                sentence: 'My favourite hobby is running.' },
+      { word: 'singing',               emoji: '🎤', german: 'Singen',                sentence: 'My favourite hobby is singing.' },
+      { word: 'skateboarding',         emoji: '🛹', german: 'Skateboard fahren',     sentence: 'My favourite hobby is skateboarding.' },
+      { word: 'skiing',                emoji: '⛷️', german: 'Skifahren',              sentence: 'My favourite hobby is skiing.' },
+      { word: 'skipping',              emoji: '🤸', german: 'Seilspringen',          sentence: 'My favourite hobby is skipping.' },
+      { word: 'swimming',              emoji: '🏊', german: 'Schwimmen',             sentence: 'My favourite hobby is swimming.' },
+      { word: 'playing table tennis',  emoji: '🏓', german: 'Tischtennis spielen',   sentence: 'My favourite hobby is playing table tennis.' },
+      { word: 'walking',               emoji: '🚶', german: 'Spazierengehen',        sentence: 'My favourite hobby is walking.' },
+      { word: 'riding a horse',        emoji: '🏇', german: 'Reiten',                sentence: 'My favourite hobby is riding a horse.' },
+      { word: 'playing the guitar',    emoji: '🎸', german: 'Gitarre spielen',       sentence: 'My favourite hobby is playing the guitar.' },
+      { word: 'playing the piano',     emoji: '🎹', german: 'Klavier spielen',       sentence: 'My favourite hobby is playing the piano.' },
+      { word: 'drawing',               emoji: '✏️', german: 'Zeichnen',               sentence: 'My favourite hobby is drawing.' },
+      { word: 'playing cards',         emoji: '🃏', german: 'Karten spielen',        sentence: 'My favourite hobby is playing cards.' },
+      { word: 'doing judo',            emoji: '🥋', german: 'Judo machen',           sentence: 'My favourite hobby is doing judo.' },
+    ];
+
+    // ── Flashcards ──
+    const fcContainer = document.getElementById('hobbies-flashcards');
+    HOBBIES.forEach(h => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${h.word}')">🔊</button>
+        <div class="fc-emoji">${h.emoji}</div>
+        <div class="fc-word">${h.word}</div>
+        <div class="fc-sub">${h.german}</div>
+      `;
+      card.addEventListener('click', () => { speak(h.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Sentence Builder ──
+    function initSentenceBuilder() {
+      const container = document.getElementById('hobbies-sentences');
+      const items = shuffle(HOBBIES).slice(0, 6);
+      let currentIdx = 0;
+      let score = 0;
+
+      function renderSentence() {
+        if (currentIdx >= items.length) {
+          const pct = Math.round(score / items.length * 100);
+          let msg = pct >= 80 ? 'Fantastic! 🌟' : pct >= 50 ? 'Good job! 👏' : 'Keep practicing! 💪';
+          if (pct >= 80) { launchConfetti(); SFX.play('win'); }
+          container.innerHTML = `
+            <div class="results">
+              <div class="trophy">${pct >= 80 ? '🏆' : '👍'}</div>
+              <h2>You completed ${score} / ${items.length} sentences!</h2>
+              <p>${msg}</p>
+              <button class="btn" onclick="location.reload()">🔄 Try Again</button>
+              <a href="index.html" class="btn secondary">🏠 Home</a>
+            </div>
+          `;
+          return;
+        }
+
+        const h = items[currentIdx];
+        const hobbyWord = h.word;
+
+        // Split the sentence around the hobby word into before/after parts
+        const blankIndex = h.sentence.indexOf(hobbyWord);
+        const before = h.sentence.substring(0, blankIndex).trim();
+        const after = h.sentence.substring(blankIndex + hobbyWord.length).trim();
+
+        // Build display: words before + blank + words after
+        const beforeSlots = before ? before.split(' ').map(w => `<span class="word-slot">${w}</span>`).join('') : '';
+        const afterSlots = after ? after.split(' ').map(w => `<span class="word-slot">${w}</span>`).join('') : '';
+
+        // Create wrong options
+        const wrongs = shuffle(HOBBIES.filter(x => x.word !== hobbyWord)).slice(0, 2).map(x => x.word);
+        const choices = shuffle([hobbyWord, ...wrongs]);
+
+        container.innerHTML = `
+          <div class="sentence-builder">
+            <div class="score-bar">
+              <span>Sentence ${currentIdx + 1} / ${items.length}</span>
+              <span class="stars">${starsHTML(score, currentIdx || 1)}</span>
+            </div>
+            <div class="progress-bar-outer">
+              <div class="progress-bar-inner" style="width:${(currentIdx / items.length * 100)}%"></div>
+            </div>
+            <h3>Complete the sentence! ${h.emoji}</h3>
+            <div class="sentence-display">
+              ${beforeSlots}
+              <span class="blank-slot" id="blank-slot">?</span>
+              ${afterSlots}
+            </div>
+            <div class="word-choices">
+              ${choices.map(c => `
+                <button class="word-choice" data-word="${c}">${c}</button>
+              `).join('')}
+            </div>
+            <button class="speak-btn" onclick="speak('${h.sentence.replace(/'/g, "\\'")}')" style="position:static;margin:16px auto 0;width:auto;height:auto;padding:10px 24px;border-radius:50px;font-size:.95rem;display:inline-flex;gap:6px;align-items:center">🔊 Listen</button>
+          </div>
+        `;
+
+        container.querySelectorAll('.word-choice').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const chosen = btn.dataset.word;
+            const blank = document.getElementById('blank-slot');
+            blank.textContent = chosen;
+            blank.classList.remove('blank-slot');
+            blank.classList.add('word-slot');
+
+            container.querySelectorAll('.word-choice').forEach(b => b.disabled = true);
+
+            if (chosen === hobbyWord) {
+              blank.style.background = 'var(--clr-correct)';
+              btn.style.background = 'var(--clr-correct)';
+              btn.style.color = 'white';
+              score++;
+              SFX.play('correct');
+              speak(h.sentence);
+            } else {
+              blank.style.background = 'var(--clr-wrong)';
+              btn.style.background = 'var(--clr-wrong)';
+              btn.style.color = 'white';
+              SFX.play('wrong');
+              container.querySelectorAll('.word-choice').forEach(b => {
+                if (b.dataset.word === hobbyWord) {
+                  b.style.background = 'var(--clr-correct)';
+                  b.style.color = 'white';
+                }
+              });
+            }
+
+            setTimeout(() => {
+              currentIdx++;
+              renderSentence();
+            }, 1500);
+          });
+        });
+      }
+
+      renderSentence();
+    }
+    initSentenceBuilder();
+
+    // ── Memory Game ──
+    const memPairs = shuffle(HOBBIES).slice(0, 6).map(h => ({
+      emoji: h.emoji,
+      word: h.word
+    }));
+    new MemoryGame({
+      containerId: 'hobbies-memory',
+      pairs: memPairs,
+      topic: 'hobbies'
+    });
+
+    // ── Quiz ──
+    function buildHobbiesQuestions() {
+      const qs = [];
+      const picked = shuffle(HOBBIES).slice(0, 10);
+      picked.slice(0, 5).forEach(h => {
+        const wrongs = shuffle(HOBBIES.filter(x => x.word !== h.word)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([h.word, ...wrongs]);
+        qs.push({
+          prompt: 'Which hobby is this?',
+          question: h.emoji,
+          options: opts,
+          correct: opts.indexOf(h.word)
+        });
+      });
+      picked.slice(5, 10).forEach(h => {
+        const wrongs = shuffle(HOBBIES.filter(x => x.word !== h.word)).slice(0, 3).map(x => x.german);
+        const opts = shuffle([h.german, ...wrongs]);
+        qs.push({
+          prompt: `What is "${h.word}" in German?`,
+          question: `${h.emoji} ${h.word}`,
+          options: opts,
+          correct: opts.indexOf(h.german)
+        });
+      });
+      return shuffle(qs);
+    }
+
+    new QuizEngine({
+      containerId: 'hobbies-quiz',
+      questions: buildHobbiesQuestions(),
+      topic: 'hobbies'
+    });
+  </script>
+</body>
+</html>

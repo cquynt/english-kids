@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn toy names in English with fun flashcards, matching games, memory game and quizzes! Color Land Class 3.">
+  <title>Toys – English Kids 🧸</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧸</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html">🔢 Numbers</a>
+        <a href="clothes.html">👕 Clothes</a>
+        <a href="hobbies.html">⚽ Hobbies</a>
+        <a href="toys.html" class="active">🧸 Toys</a>
+        <a href="colors.html">🎨 Colours</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">🧸</div>
+    <h1>Toys</h1>
+    <p>Learn the names of toys in English! Click a card to hear the word 🔊</p>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="match" id="tab-match">🎯 Match</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="toys-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="match">
+    <div id="toys-match"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="toys-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="toys-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English · Color Land</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Color Land Klasse 3 – Toys vocabulary
+    const TOYS = [
+      { word: 'jigsaw puzzle',   emoji: '🧩', german: 'Puzzle' },
+      { word: 'board game',      emoji: '🎲', german: 'Brettspiel' },
+      { word: 'computer game',   emoji: '🎮', german: 'Computerspiel' },
+      { word: 'doll',            emoji: '🪆', german: 'Puppe' },
+      { word: 'toy car',         emoji: '🚗', german: 'Spielzeugauto' },
+      { word: 'toy plane',       emoji: '✈️', german: 'Spielzeugflugzeug' },
+      { word: 'toy train',       emoji: '🚂', german: 'Spielzeugeisenbahn' },
+      { word: 'skipping rope',   emoji: '🪢', german: 'Springseil' },
+      { word: 'football',        emoji: '⚽', german: 'Fußball' },
+      { word: 'cards',           emoji: '🃏', german: 'Karten' },
+      { word: 'marbles',         emoji: '🔮', german: 'Murmeln' },
+      { word: 'toy truck',       emoji: '🚛', german: 'Spielzeug-LKW' },
+      { word: 'bricks',          emoji: '🧱', german: 'Bausteine' },
+      { word: 'ball',            emoji: '🏐', german: 'Ball' },
+      { word: 'story book',      emoji: '📖', german: 'Geschichtenbuch' },
+      { word: 'teddy bear',      emoji: '🧸', german: 'Teddybär' },
+      { word: 'toy boat',        emoji: '⛵', german: 'Spielzeugboot' },
+      { word: 'in-line skates',  emoji: '⛸️', german: 'Inlineskates' },
+      { word: 'skateboard',      emoji: '🛹', german: 'Skateboard' },
+      { word: 'music player',    emoji: '🎵', german: 'Musikspieler' },
+      { word: 'mountain bike',   emoji: '🚵', german: 'Mountainbike' },
+    ];
+
+    // ── Flashcards ──
+    const fcContainer = document.getElementById('toys-flashcards');
+    TOYS.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${t.word}')">🔊</button>
+        <div class="fc-emoji">${t.emoji}</div>
+        <div class="fc-word">${t.word}</div>
+        <div class="fc-sub">${t.german}</div>
+      `;
+      card.addEventListener('click', () => { speak(t.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Matching Game ──
+    const matchPairs = shuffle(TOYS).slice(0, 8).map(t => ({
+      left: t.emoji,
+      right: t.word
+    }));
+    new MatchGame({
+      containerId: 'toys-match',
+      pairs: matchPairs,
+      topic: 'toys'
+    });
+
+    // ── Memory Game ──
+    const memPairs = shuffle(TOYS).slice(0, 6).map(t => ({
+      emoji: t.emoji,
+      word: t.word
+    }));
+    new MemoryGame({
+      containerId: 'toys-memory',
+      pairs: memPairs,
+      topic: 'toys'
+    });
+
+    // ── Quiz ──
+    function buildToysQuestions() {
+      const qs = [];
+      const picked = shuffle(TOYS).slice(0, 10);
+      // Type 1: Which toy is this? (emoji → word)
+      picked.slice(0, 5).forEach(t => {
+        const wrongs = shuffle(TOYS.filter(x => x.word !== t.word)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([t.word, ...wrongs]);
+        qs.push({
+          prompt: 'Which toy is this?',
+          question: t.emoji,
+          options: opts,
+          correct: opts.indexOf(t.word)
+        });
+      });
+      // Type 2: What is the German word?
+      picked.slice(5, 10).forEach(t => {
+        const wrongs = shuffle(TOYS.filter(x => x.word !== t.word)).slice(0, 3).map(x => x.german);
+        const opts = shuffle([t.german, ...wrongs]);
+        qs.push({
+          prompt: `What is "${t.word}" in German?`,
+          question: `${t.emoji} ${t.word}`,
+          options: opts,
+          correct: opts.indexOf(t.german)
+        });
+      });
+      return shuffle(qs);
+    }
+
+    new QuizEngine({
+      containerId: 'toys-quiz',
+      questions: buildToysQuestions(),
+      topic: 'toys'
+    });
+  </script>
+</body>
+</html>

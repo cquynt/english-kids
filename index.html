@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fun English learning website for 3rd graders. Learn Numbers, Clothes, Hobbies, Toys and Colours with interactive games and quizzes! Color Land.">
+  <title>English Kids – Learn English the Fun Way! 🎉</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html">🔢 Numbers</a>
+        <a href="clothes.html">👕 Clothes</a>
+        <a href="hobbies.html">⚽ Hobbies</a>
+        <a href="toys.html">🧸 Toys</a>
+        <a href="colors.html">🎨 Colours</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="mascot">🦉</div>
+    <h1>Learn English the Fun Way!</h1>
+    <p>Welcome, young learner! Pick a topic below and start your English adventure. Learn new words, play games, and earn stars!</p>
+    <div class="stars-summary">
+      <span class="star-count">⭐</span>
+      <span>Stars earned: <strong id="total-stars">0 / 15</strong></span>
+    </div>
+  </section>
+
+  <section class="topics-grid">
+
+    <a href="numbers.html" class="topic-card numbers-card" id="card-numbers">
+      <div class="card-emoji">🔢</div>
+      <h2>Numbers</h2>
+      <p>Learn to count from 1 to 20 in English! Play matching games and quizzes.</p>
+      <div class="card-progress" id="progress-numbers"></div>
+      <span class="btn">Let's Count! →</span>
+    </a>
+
+    <a href="clothes.html" class="topic-card clothes-card" id="card-clothes">
+      <div class="card-emoji">👕</div>
+      <h2>Clothes</h2>
+      <p>Discover the names of clothes in English! T-shirts, dresses, shoes and more.</p>
+      <div class="card-progress" id="progress-clothes"></div>
+      <span class="btn">Get Dressed! →</span>
+    </a>
+
+    <a href="hobbies.html" class="topic-card hobbies-card" id="card-hobbies">
+      <div class="card-emoji">⚽</div>
+      <h2>Hobbies</h2>
+      <p>Talk about your favourite hobbies in English! Sports, art, music and fun.</p>
+      <div class="card-progress" id="progress-hobbies"></div>
+      <span class="btn">Let's Play! →</span>
+    </a>
+
+    <a href="toys.html" class="topic-card toys-card" id="card-toys">
+      <div class="card-emoji">🧸</div>
+      <h2>Toys</h2>
+      <p>Learn the names of your favourite toys in English! Teddy bears, cars, robots and more.</p>
+      <div class="card-progress" id="progress-toys"></div>
+      <span class="btn">Let's Play! →</span>
+    </a>
+
+    <a href="colors.html" class="topic-card colors-card" id="card-colors">
+      <div class="card-emoji">🎨</div>
+      <h2>Colours</h2>
+      <p>Learn all the colours in English! Red, blue, green, yellow and more.</p>
+      <div class="card-progress" id="progress-colors"></div>
+      <span class="btn">Paint Away! →</span>
+    </a>
+
+  </section>
+
+  <section class="badges-section">
+    <h2>🏅 Your Achievements</h2>
+    <div class="badges-grid" id="badges-grid"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English · Color Land</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

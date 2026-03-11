@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn colour names in English with fun flashcards, matching games, memory game and quizzes! Color Land Class 3.">
+  <title>Colours – English Kids 🎨</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html">🔢 Numbers</a>
+        <a href="clothes.html">👕 Clothes</a>
+        <a href="hobbies.html">⚽ Hobbies</a>
+        <a href="toys.html">🧸 Toys</a>
+        <a href="colors.html" class="active">🎨 Colours</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">🎨</div>
+    <h1>Colours</h1>
+    <p>Learn the names of colours in English! Click a card to hear the word 🔊</p>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="match" id="tab-match">🎯 Match</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="colors-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="match">
+    <div id="colors-match"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="colors-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="colors-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English · Color Land</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Color Land Klasse 3 – Colours vocabulary
+    const COLORS = [
+      { word: 'red',        emoji: '🔴', hex: '#e74c3c', german: 'rot' },
+      { word: 'blue',       emoji: '🔵', hex: '#3498db', german: 'blau' },
+      { word: 'green',      emoji: '🟢', hex: '#2ecc71', german: 'grün' },
+      { word: 'yellow',     emoji: '🟡', hex: '#f1c40f', german: 'gelb' },
+      { word: 'orange',     emoji: '🟠', hex: '#e67e22', german: 'orange' },
+      { word: 'purple',     emoji: '🟣', hex: '#9b59b6', german: 'lila' },
+      { word: 'pink',       emoji: '🩷', hex: '#e91e8c', german: 'rosa' },
+      { word: 'brown',      emoji: '🟤', hex: '#795548', german: 'braun' },
+      { word: 'black',      emoji: '⚫', hex: '#2c3e50', german: 'schwarz' },
+      { word: 'white',      emoji: '⚪', hex: '#ecf0f1', german: 'weiß' },
+      { word: 'grey',       emoji: '🩶', hex: '#95a5a6', german: 'grau' },
+      { word: 'turquoise', emoji: '🩵', hex: '#40E0D0', german: 'türkis' },
+    ];
+
+    // ── Flashcards with colored backgrounds ──
+    const fcContainer = document.getElementById('colors-flashcards');
+    COLORS.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      const textColor = ['black', 'brown', 'purple', 'blue'].includes(c.word) ? '#fff' : '#2d3436';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${c.word}')">🔊</button>
+        <div class="fc-emoji" style="width:56px;height:56px;border-radius:50%;background:${c.hex};margin:0 auto 10px;box-shadow:0 4px 12px ${c.hex}44"></div>
+        <div class="fc-word">${c.word}</div>
+        <div class="fc-sub">${c.german}</div>
+      `;
+      card.addEventListener('click', () => { speak(c.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Matching Game ──
+    const matchPairs = shuffle(COLORS).slice(0, 8).map(c => ({
+      left: c.emoji,
+      right: c.word
+    }));
+    new MatchGame({
+      containerId: 'colors-match',
+      pairs: matchPairs,
+      topic: 'colors'
+    });
+
+    // ── Memory Game ──
+    const memPairs = shuffle(COLORS).slice(0, 6).map(c => ({
+      emoji: c.emoji,
+      word: c.word
+    }));
+    new MemoryGame({
+      containerId: 'colors-memory',
+      pairs: memPairs,
+      topic: 'colors'
+    });
+
+    // ── Quiz ──
+    function buildColorsQuestions() {
+      const qs = [];
+      const picked = shuffle(COLORS).slice(0, 10);
+      // Type 1: What colour is this? (emoji → word)
+      picked.slice(0, 5).forEach(c => {
+        const wrongs = shuffle(COLORS.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([c.word, ...wrongs]);
+        qs.push({
+          prompt: 'What colour is this?',
+          question: c.emoji,
+          options: opts,
+          correct: opts.indexOf(c.word)
+        });
+      });
+      // Type 2: What is the German word?
+      picked.slice(5, 10).forEach(c => {
+        const wrongs = shuffle(COLORS.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.german);
+        const opts = shuffle([c.german, ...wrongs]);
+        qs.push({
+          prompt: `What is "${c.word}" in German?`,
+          question: `${c.emoji} ${c.word}`,
+          options: opts,
+          correct: opts.indexOf(c.german)
+        });
+      });
+      return shuffle(qs);
+    }
+
+    new QuizEngine({
+      containerId: 'colors-quiz',
+      questions: buildColorsQuestions(),
+      topic: 'colors'
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn numbers 1-20 in English with fun flashcards, matching games, memory game and quizzes!">
+  <title>Numbers – English Kids 🔢</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔢</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html" class="active" id="nav-numbers">🔢 Numbers</a>
+        <a href="clothes.html" id="nav-clothes">👕 Clothes</a>
+        <a href="hobbies.html" id="nav-hobbies">⚽ Hobbies</a>
+        <a href="toys.html">🧸 Toys</a>
+        <a href="colors.html">🎨 Colours</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">🔢</div>
+    <h1>Numbers 1 – 20</h1>
+    <p>Learn how to say numbers in English! Click a card to hear the word 🔊</p>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="match" id="tab-match">🎯 Match</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="numbers-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="match">
+    <div id="numbers-match"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="numbers-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="numbers-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    const NUMBERS = [
+      { num: 1,  word: 'one',       emoji: '1️⃣' },
+      { num: 2,  word: 'two',       emoji: '2️⃣' },
+      { num: 3,  word: 'three',     emoji: '3️⃣' },
+      { num: 4,  word: 'four',      emoji: '4️⃣' },
+      { num: 5,  word: 'five',      emoji: '5️⃣' },
+      { num: 6,  word: 'six',       emoji: '6️⃣' },
+      { num: 7,  word: 'seven',     emoji: '7️⃣' },
+      { num: 8,  word: 'eight',     emoji: '8️⃣' },
+      { num: 9,  word: 'nine',      emoji: '9️⃣' },
+      { num: 10, word: 'ten',       emoji: '🔟' },
+      { num: 11, word: 'eleven',    emoji: '1️⃣1️⃣' },
+      { num: 12, word: 'twelve',    emoji: '1️⃣2️⃣' },
+      { num: 13, word: 'thirteen',  emoji: '1️⃣3️⃣' },
+      { num: 14, word: 'fourteen',  emoji: '1️⃣4️⃣' },
+      { num: 15, word: 'fifteen',   emoji: '1️⃣5️⃣' },
+      { num: 16, word: 'sixteen',   emoji: '1️⃣6️⃣' },
+      { num: 17, word: 'seventeen', emoji: '1️⃣7️⃣' },
+      { num: 18, word: 'eighteen',  emoji: '1️⃣8️⃣' },
+      { num: 19, word: 'nineteen',  emoji: '1️⃣9️⃣' },
+      { num: 20, word: 'twenty',    emoji: '2️⃣0️⃣' },
+    ];
+
+    // ── Flashcards ──
+    const fcContainer = document.getElementById('numbers-flashcards');
+    NUMBERS.forEach(n => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${n.word}')">🔊</button>
+        <div class="fc-emoji" style="font-size:2.2rem;font-weight:800">${n.num}</div>
+        <div class="fc-word">${n.word}</div>
+      `;
+      card.addEventListener('click', () => { speak(n.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Matching Game ──
+    const matchPairs = shuffle(NUMBERS).slice(0, 8).map(n => ({
+      left: String(n.num),
+      right: n.word
+    }));
+    new MatchGame({
+      containerId: 'numbers-match',
+      pairs: matchPairs,
+      topic: 'numbers'
+    });
+
+    // ── Memory Game ──
+    const memPairs = shuffle(NUMBERS).slice(0, 6).map(n => ({
+      emoji: String(n.num),
+      word: n.word
+    }));
+    new MemoryGame({
+      containerId: 'numbers-memory',
+      pairs: memPairs,
+      topic: 'numbers'
+    });
+
+    // ── Quiz ──
+    function buildNumberQuestions() {
+      const qs = [];
+      const picked = shuffle(NUMBERS).slice(0, 10);
+      picked.forEach(n => {
+        const wrongs = shuffle(NUMBERS.filter(x => x.num !== n.num)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([n.word, ...wrongs]);
+        qs.push({
+          prompt: 'What is the English word for this number?',
+          question: `${n.num}`,
+          options: opts,
+          correct: opts.indexOf(n.word)
+        });
+      });
+      return shuffle(qs);
+    }
+
+    new QuizEngine({
+      containerId: 'numbers-quiz',
+      questions: buildNumberQuestions(),
+      topic: 'numbers'
+    });
+  </script>
+</body>
+</html>
