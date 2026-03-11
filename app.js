@@ -194,7 +194,7 @@ function getStarCount(topic) {
 }
 
 // ── All Topics List ──
-const ALL_TOPICS = ['numbers', 'clothes', 'hobbies', 'toys', 'colors'];
+const ALL_TOPICS = ['numbers', 'body', 'clothes', 'hobbies', 'toys', 'colors', 'birthday', 'summer', 'family', 'feelings'];
 
 // ── Badge System ──
 const BADGES = [
@@ -603,10 +603,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateHomeProgress() {
   const topics = [
     { key: 'numbers', cardId: 'card-numbers' },
+    { key: 'body',    cardId: 'card-body' },
     { key: 'clothes', cardId: 'card-clothes' },
     { key: 'hobbies', cardId: 'card-hobbies' },
     { key: 'toys',    cardId: 'card-toys' },
     { key: 'colors',  cardId: 'card-colors' },
+    { key: 'birthday',cardId: 'card-birthday' },
+    { key: 'summer',  cardId: 'card-summer' },
+    { key: 'family',  cardId: 'card-family' },
+    { key: 'feelings',cardId: 'card-feelings' },
   ];
 
   let totalStars = 0;
@@ -633,7 +638,7 @@ function updateHomeProgress() {
     }
   });
 
-  // Update total stars (5 topics × 3 stars = 15)
+  // Update total stars (10 topics × 3 stars = 30)
   const starsEl = document.getElementById('total-stars');
-  if (starsEl) starsEl.textContent = `${totalStars} / 15`;
+  if (starsEl) starsEl.textContent = `${totalStars} / 30`;
 }

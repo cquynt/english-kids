@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn birthday vocabulary in English with fun flashcards, matching games, memory game and quizzes!">
+  <title>Birthday – English Kids 🎂</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html">🔢 Numbers</a>
+        <a href="body.html">🧍 Body</a>
+        <a href="clothes.html">👕 Clothes</a>
+        <a href="hobbies.html">⚽ Hobbies</a>
+        <a href="toys.html">🧸 Toys</a>
+        <a href="colors.html">🎨 Colours</a>
+        <a href="birthday.html" class="active">🎂 Birthday</a>
+        <a href="summer.html">☀️ Summer</a>
+        <a href="family.html">👨‍👩‍👧‍👦 Family</a>
+        <a href="feelings.html">😊 Feelings</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">🎂</div>
+    <h1>Birthday</h1>
+    <p>Learn the birthday words in English! Click a card to hear the word 🔊</p>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="match" id="tab-match">🎯 Match</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="birthday-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="match">
+    <div id="birthday-match"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="birthday-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="birthday-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    const BIRTHDAY_WORDS = [
+      { word: 'balloon',        emoji: '🎈', german: 'Luftballon' },
+      { word: 'birthday cake',  emoji: '🎂', german: 'Geburtstagskuchen' },
+      { word: 'birthday card',  emoji: '💌', german: 'Geburtstagskarte' },
+      { word: 'birthday crown', emoji: '👑', german: 'Geburtstagskrone' },
+      { word: 'party hat',      emoji: '🥳', german: 'Partyhut' },
+      { word: 'birthday party', emoji: '🎉', german: 'Geburtstagsparty' }
+    ];
+
+    // ── Flashcards ──
+    const fcContainer = document.getElementById('birthday-flashcards');
+    BIRTHDAY_WORDS.forEach(w => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${w.word}')">🔊</button>
+        <div class="fc-emoji">${w.emoji}</div>
+        <div class="fc-word">${w.word}</div>
+        <div class="fc-sub">${w.german}</div>
+      `;
+      card.addEventListener('click', () => { speak(w.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Matching Game ──
+    const matchPairs = shuffle(BIRTHDAY_WORDS).slice(0, 8).map(w => ({
+      left: w.emoji,
+      right: w.word
+    }));
+    new MatchGame({
+      containerId: 'birthday-match',
+      pairs: matchPairs,
+      topic: 'birthday'
+    });
+
+    // ── Memory Game ──
+    const memPairs = shuffle(BIRTHDAY_WORDS).slice(0, 6).map(w => ({
+      emoji: w.emoji,
+      word: w.word
+    }));
+    new MemoryGame({
+      containerId: 'birthday-memory',
+      pairs: memPairs,
+      topic: 'birthday'
+    });
+
+    // ── Quiz ──
+    function buildBirthdayQuestions() {
+      const qs = [];
+      const picked = shuffle([...BIRTHDAY_WORDS, ...BIRTHDAY_WORDS]).slice(0, 10);
+      picked.slice(0, 5).forEach(c => {
+        const wrongs = shuffle(BIRTHDAY_WORDS.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([c.word, ...wrongs]);
+        qs.push({
+          prompt: 'Which word is this?',
+          question: c.emoji,
+          options: opts,
+          correct: opts.indexOf(c.word)
+        });
+      });
+      picked.slice(5, 10).forEach(c => {
+        const wrongs = shuffle(BIRTHDAY_WORDS.filter(x => x.german !== c.german)).slice(0, 3).map(x => x.german);
+        const opts = shuffle([c.german, ...wrongs]);
+        qs.push({
+          prompt: `What is "${c.word}" in German?`,
+          question: `${c.emoji} ${c.word}`,
+          options: opts,
+          correct: opts.indexOf(c.german)
+        });
+      });
+      return qs;
+    }
+
+    new QuizEngine({
+      containerId: 'birthday-quiz',
+      questions: buildBirthdayQuestions(),
+      topic: 'birthday'
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn body parts vocabulary in English with fun flashcards, matching games, memory game and quizzes!">
+  <title>Body – English Kids 🧍</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧍</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav>
+        <a href="numbers.html">🔢 Numbers</a>
+        <a href="body.html" class="active">🧍 Body</a>
+        <a href="clothes.html">👕 Clothes</a>
+        <a href="hobbies.html">⚽ Hobbies</a>
+        <a href="toys.html">🧸 Toys</a>
+        <a href="colors.html">🎨 Colours</a>
+        <a href="birthday.html">🎂 Birthday</a>
+        <a href="summer.html">☀️ Summer</a>
+        <a href="family.html">👨‍👩‍👧‍👦 Family</a>
+        <a href="feelings.html">😊 Feelings</a>
+      </nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">🧍</div>
+    <h1>Body</h1>
+    <p>Learn the parts of the body in English! Click a card to hear the word 🔊</p>
+    <div style="margin-top: 16px; font-weight: bold; background: var(--clr-card); display: inline-block; padding: 10px 20px; border-radius: var(--radius-sm); color: var(--clr-primary); box-shadow: var(--shadow);">
+      💡 Remember: 1 eye ➔ 2 eyes | 1 foot ➔ 2 feet!
+    </div>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="match" id="tab-match">🎯 Match</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="body-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="match">
+    <div id="body-match"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="body-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="body-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    const BODY_PARTS = [
+      { word: 'head',       emoji: '🧑', german: 'Kopf' },
+      { word: 'eye',        emoji: '👁️', german: 'Auge' },
+      { word: 'nose',       emoji: '👃', german: 'Nase' },
+      { word: 'mouth',      emoji: '👄', german: 'Mund' },
+      { word: 'ear',        emoji: '👂', german: 'Ohr' },
+      { word: 'body',       emoji: '🧍', german: 'Körper' },
+      { word: 'shoulder',   emoji: '🤷', german: 'Schulter' },
+      { word: 'arm',        emoji: '💪', german: 'Arm' },
+      { word: 'hand',       emoji: '✋', german: 'Hand' },
+      { word: 'finger',     emoji: '☝️', german: 'Finger' },
+      { word: 'leg',        emoji: '🦵', german: 'Bein' },
+      { word: 'knee',       emoji: '🧎', german: 'Knie' },
+      { word: 'foot',       emoji: '🦶', german: 'Fuß' },
+      { word: 'toe',        emoji: '👣', german: 'Zeh' },
+      { word: 'hair',       emoji: '💇', german: 'Haare' }
+    ];
+
+    // ── Flashcards ──
+    const fcContainer = document.getElementById('body-flashcards');
+    BODY_PARTS.forEach(b => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${b.word}')">🔊</button>
+        <div class="fc-emoji">${b.emoji}</div>
+        <div class="fc-word">${b.word}</div>
+        <div class="fc-sub">${b.german}</div>
+      `;
+      card.addEventListener('click', () => { speak(b.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Matching Game ──
+    const matchPairs = shuffle(BODY_PARTS).slice(0, 8).map(b => ({
+      left: b.emoji,
+      right: b.word
+    }));
+    new MatchGame({
+      containerId: 'body-match',
+      pairs: matchPairs,
+      topic: 'body'
+    });
+
+    // ── Memory Game ──
+    const memPairs = shuffle(BODY_PARTS).slice(0, 6).map(b => ({
+      emoji: b.emoji,
+      word: b.word
+    }));
+    new MemoryGame({
+      containerId: 'body-memory',
+      pairs: memPairs,
+      topic: 'body'
+    });
+
+    // ── Quiz ──
+    function buildBodyQuestions() {
+      const qs = [];
+      const picked = shuffle(BODY_PARTS).slice(0, 10);
+      picked.slice(0, 5).forEach(b => {
+        const wrongs = shuffle(BODY_PARTS.filter(x => x.word !== b.word)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([b.word, ...wrongs]);
+        qs.push({
+          prompt: 'Which body part is this?',
+          question: b.emoji,
+          options: opts,
+          correct: opts.indexOf(b.word)
+        });
+      });
+      picked.slice(5, 10).forEach(b => {
+        const wrongs = shuffle(BODY_PARTS.filter(x => x.word !== b.word)).slice(0, 3).map(x => x.german);
+        const opts = shuffle([b.german, ...wrongs]);
+        qs.push({
+          prompt: `What is "${b.word}" in German?`,
+          question: `${b.emoji} ${b.word}`,
+          options: opts,
+          correct: opts.indexOf(b.german)
+        });
+      });
+      return shuffle(qs);
+    }
+
+    new QuizEngine({
+      containerId: 'body-quiz',
+      questions: buildBodyQuestions(),
+      topic: 'body'
+    });
+  </script>
+</body>
+</html>
