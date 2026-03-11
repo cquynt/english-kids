@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Learn family vocabulary in English with fun games and quizzes!">
-  <title>Family – English Kids 👨‍👩‍👧‍👦</title>
+  <meta name="description" content="Learn months vocabulary in English with fun games and quizzes!">
+  <title>Months – English Kids 📅</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍👩‍👧‍👦</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
 </head>
 <body>
 
@@ -22,9 +22,9 @@
   </header>
 
   <section class="page-header">
-    <div class="emoji-icon">👨‍👩‍👧‍👦</div>
-    <h1>Family</h1>
-    <p>Learn family words in English! Click a card to hear the word 🔊</p>
+    <div class="emoji-icon">📅</div>
+    <h1>Months</h1>
+    <p>Learn months in English! Click a card to hear the word 🔊</p>
   </section>
 
   <div class="section-tabs">
@@ -35,19 +35,19 @@
   </div>
 
   <section class="content-section active" id="learn">
-    <div class="flashcards" id="family-flashcards"></div>
+    <div class="flashcards" id="months-flashcards"></div>
   </section>
 
   <section class="content-section" id="match">
-    <div id="family-match"></div>
+    <div id="months-match"></div>
   </section>
 
   <section class="content-section" id="memory">
-    <div id="family-memory"></div>
+    <div id="months-memory"></div>
   </section>
 
   <section class="content-section" id="quiz">
-    <div id="family-quiz"></div>
+    <div id="months-quiz"></div>
   </section>
 
   <footer class="site-footer">
@@ -56,18 +56,24 @@
 
   <script src="app.js"></script>
   <script>
-    const FAMILY_WORDS = [
-      { word: 'father',  emoji: '👨', german: 'Vater' },
-      { word: 'mother',  emoji: '👩', german: 'Mutter' },
-      { word: 'sister',  emoji: '👧', german: 'Schwester' },
-      { word: 'brother', emoji: '👦', german: 'Bruder' },
-      { word: 'grandma', emoji: '👵', german: 'Oma' },
-      { word: 'grandpa', emoji: '👴', german: 'Opa' }
+    const MONTHS_WORDS = [
+      { word: 'January', emoji: '⛄', german: 'Januar' },
+      { word: 'February', emoji: '⛸️', german: 'Februar' },
+      { word: 'March', emoji: '🌱', german: 'März' },
+      { word: 'April', emoji: '☔', german: 'April' },
+      { word: 'May', emoji: '🚲', german: 'Mai' },
+      { word: 'June', emoji: '🍦', german: 'Juni' },
+      { word: 'July', emoji: '🛟', german: 'Juli' },
+      { word: 'August', emoji: '🕶️', german: 'August' },
+      { word: 'September', emoji: '🍎', german: 'September' },
+      { word: 'October', emoji: '🧙', german: 'Oktober' },
+      { word: 'November', emoji: '🪁', german: 'November' },
+      { word: 'December', emoji: '⛷️', german: 'Dezember' }
     ];
 
     // ── Flashcards ──
-    const fcContainer = document.getElementById('family-flashcards');
-    FAMILY_WORDS.forEach(w => {
+    const fcContainer = document.getElementById('months-flashcards');
+    MONTHS_WORDS.forEach(w => {
       const card = document.createElement('div');
       card.className = 'flashcard';
       card.innerHTML = `
@@ -81,43 +87,43 @@
     });
 
     // ── Matching Game ──
-    const matchPairs = shuffle([...FAMILY_WORDS, ...FAMILY_WORDS]).slice(0, 8).map(w => ({
+    const matchPairs = shuffle([...MONTHS_WORDS]).slice(0, 8).map(w => ({
       left: w.emoji,
       right: w.word
     }));
     new MatchGame({
-      containerId: 'family-match',
+      containerId: 'months-match',
       pairs: matchPairs,
-      topic: 'family'
+      topic: 'months'
     });
 
     // ── Memory Game ──
-    const memPairs = shuffle(FAMILY_WORDS).slice(0, 6).map(w => ({
+    const memPairs = shuffle([...MONTHS_WORDS]).slice(0, 6).map(w => ({
       emoji: w.emoji,
       word: w.word
     }));
     new MemoryGame({
-      containerId: 'family-memory',
+      containerId: 'months-memory',
       pairs: memPairs,
-      topic: 'family'
+      topic: 'months'
     });
 
     // ── Quiz ──
-    function buildFamilyQuestions() {
+    function buildMonthsQuestions() {
       const qs = [];
-      const picked = shuffle([...FAMILY_WORDS, ...FAMILY_WORDS]).slice(0, 10);
+      const picked = shuffle([...MONTHS_WORDS]).slice(0, 10);
       picked.slice(0, 5).forEach(c => {
-        const wrongs = shuffle(FAMILY_WORDS.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.word);
+        const wrongs = shuffle(MONTHS_WORDS.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.word);
         const opts = shuffle([c.word, ...wrongs]);
         qs.push({
-          prompt: 'Who is this?',
+          prompt: 'What month is this?',
           question: c.emoji,
           options: opts,
           correct: opts.indexOf(c.word)
         });
       });
       picked.slice(5, 10).forEach(c => {
-        const wrongs = shuffle(FAMILY_WORDS.filter(x => x.german !== c.german)).slice(0, 3).map(x => x.german);
+        const wrongs = shuffle(MONTHS_WORDS.filter(x => x.german !== c.german)).slice(0, 3).map(x => x.german);
         const opts = shuffle([c.german, ...wrongs]);
         qs.push({
           prompt: `What is "${c.word}" in German?`,
@@ -130,9 +136,9 @@
     }
 
     new QuizEngine({
-      containerId: 'family-quiz',
-      questions: buildFamilyQuestions(),
-      topic: 'family'
+      containerId: 'months-quiz',
+      questions: buildMonthsQuestions(),
+      topic: 'months'
     });
   </script>
 </body>

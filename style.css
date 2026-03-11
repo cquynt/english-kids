@@ -272,6 +272,11 @@ button { cursor: pointer; font-family: var(--font); border: none; }
 .topic-card.summer-card::before  { background: linear-gradient(90deg, #f39c12, #f1c40f); }
 .topic-card.family-card::before  { background: linear-gradient(90deg, #48dbfb, #1dd1a1); }
 .topic-card.feelings-card::before{ background: linear-gradient(90deg, #ff6b6b, #feca57); }
+.topic-card.school-card::before  { background: linear-gradient(90deg, #8e44ad, #2980b9); }
+.topic-card.months-card::before  { background: linear-gradient(90deg, #16a085, #f39c12); }
+.topic-card.days-card::before    { background: linear-gradient(90deg, #d35400, #c0392b); }
+.topic-card.seasons-card::before { background: linear-gradient(90deg, #27ae60, #f1c40f); }
+.topic-card.weather-card::before { background: linear-gradient(90deg, #2980b9, #34495e); }
 .topic-card.numbers-card .btn { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
 .topic-card.body-card .btn    { background: linear-gradient(135deg, #ff9ff3, #feca57); }
 .topic-card.clothes-card .btn { background: linear-gradient(135deg, #fd79a8, #e84393); }
@@ -282,6 +287,11 @@ button { cursor: pointer; font-family: var(--font); border: none; }
 .topic-card.summer-card .btn  { background: linear-gradient(135deg, #e67e22, #f1c40f); }
 .topic-card.family-card .btn  { background: linear-gradient(135deg, #48dbfb, #0abde3); }
 .topic-card.feelings-card .btn{ background: linear-gradient(135deg, #ff6b6b, #ee5253); }
+.topic-card.school-card .btn  { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+.topic-card.months-card .btn  { background: linear-gradient(135deg, #16a085, #1abc9c); }
+.topic-card.days-card .btn    { background: linear-gradient(135deg, #d35400, #e67e22); }
+.topic-card.seasons-card .btn { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+.topic-card.weather-card .btn { background: linear-gradient(135deg, #2980b9, #3498db); }
 .topic-card.numbers-card .ring-fill { stroke: #6c5ce7; }
 .topic-card.body-card .ring-fill    { stroke: #ff9ff3; }
 .topic-card.clothes-card .ring-fill { stroke: #fd79a8; }
@@ -292,6 +302,11 @@ button { cursor: pointer; font-family: var(--font); border: none; }
 .topic-card.summer-card .ring-fill  { stroke: #f39c12; }
 .topic-card.family-card .ring-fill  { stroke: #48dbfb; }
 .topic-card.feelings-card .ring-fill{ stroke: #ff6b6b; }
+.topic-card.school-card .ring-fill  { stroke: #8e44ad; }
+.topic-card.months-card .ring-fill  { stroke: #16a085; }
+.topic-card.days-card .ring-fill    { stroke: #d35400; }
+.topic-card.seasons-card .ring-fill { stroke: #27ae60; }
+.topic-card.weather-card .ring-fill { stroke: #2980b9; }
 
 /* ---------- Badges Section ---------- */
 .badges-section {

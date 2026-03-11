@@ -194,7 +194,38 @@ function getStarCount(topic) {
 }
 
 // ── All Topics List ──
-const ALL_TOPICS = ['numbers', 'body', 'clothes', 'hobbies', 'toys', 'colors', 'birthday', 'summer', 'family', 'feelings'];
+const ALL_TOPICS = ['numbers', 'body', 'clothes', 'hobbies', 'toys', 'colors', 'birthday', 'summer', 'family', 'feelings', 'school', 'months', 'days', 'seasons', 'weather'];
+
+// ── Navigation Menu Data ──
+const NAV_ITEMS = [
+  { path: 'numbers.html', emoji: '🔢', text: 'Numbers' },
+  { path: 'body.html', emoji: '🧍', text: 'Body' },
+  { path: 'clothes.html', emoji: '👕', text: 'Clothes' },
+  { path: 'hobbies.html', emoji: '⚽', text: 'Hobbies' },
+  { path: 'toys.html', emoji: '🧸', text: 'Toys' },
+  { path: 'colors.html', emoji: '🎨', text: 'Colours' },
+  { path: 'birthday.html', emoji: '🎂', text: 'Birthday' },
+  { path: 'summer.html', emoji: '☀️', text: 'Summer' },
+  { path: 'family.html', emoji: '👨‍👩‍👧‍👦', text: 'Family' },
+  { path: 'feelings.html', emoji: '😊', text: 'Feelings' },
+  { path: 'school.html', emoji: '🏫', text: 'School' },
+  { path: 'months.html', emoji: '📅', text: 'Months' },
+  { path: 'days.html', emoji: '📆', text: 'Days' },
+  { path: 'seasons.html', emoji: '🌸', text: 'Seasons' },
+  { path: 'weather.html', emoji: '☀️', text: 'Weather' }
+];
+
+function renderNavigation() {
+  const navContainer = document.getElementById('main-nav');
+  if (!navContainer) return;
+
+  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+
+  navContainer.innerHTML = NAV_ITEMS.map(item => {
+    const isActive = currentPath === item.path ? 'class="active"' : '';
+    return `<a href="${item.path}" ${isActive}>${item.emoji} ${item.text}</a>`;
+  }).join('');
+}
 
 // ── Badge System ──
 const BADGES = [
@@ -595,6 +626,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Render badges if on home page
   renderBadges('badges-grid');
 
+  // Render navigation menu dynamically
+  renderNavigation();
+
   // Render progress on home page topic cards
   updateHomeProgress();
 });
@@ -612,6 +646,11 @@ function updateHomeProgress() {
     { key: 'summer',  cardId: 'card-summer' },
     { key: 'family',  cardId: 'card-family' },
     { key: 'feelings',cardId: 'card-feelings' },
+    { key: 'school',  cardId: 'card-school' },
+    { key: 'months',  cardId: 'card-months' },
+    { key: 'days',    cardId: 'card-days' },
+    { key: 'seasons', cardId: 'card-seasons' },
+    { key: 'weather', cardId: 'card-weather' },
   ];
 
   let totalStars = 0;
@@ -638,7 +677,7 @@ function updateHomeProgress() {
     }
   });
 
-  // Update total stars (10 topics × 3 stars = 30)
+  // Update total stars (15 topics × 3 stars = 45)
   const starsEl = document.getElementById('total-stars');
-  if (starsEl) starsEl.textContent = `${totalStars} / 30`;
+  if (starsEl) starsEl.textContent = `${totalStars} / 45`;
 }

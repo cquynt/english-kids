@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn school vocabulary in English with fun games and quizzes!">
+  <title>School – English Kids 🏫</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏫</text></svg>">
+</head>
+<body>
+
+  <div class="bg-blobs"><span></span><span></span><span></span></div>
+  <div class="sparkles"></div>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">📚 English Kids</a>
+    <div class="nav-right">
+      <nav id="main-nav"></nav>
+      <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <section class="page-header">
+    <div class="emoji-icon">🏫</div>
+    <h1>School</h1>
+    <p>Learn school words in English! Click a card to hear the word 🔊</p>
+  </section>
+
+  <div class="section-tabs">
+    <button class="tab-btn active" data-tab="learn" id="tab-learn">📖 Learn</button>
+    <button class="tab-btn" data-tab="match" id="tab-match">🎯 Match</button>
+    <button class="tab-btn" data-tab="memory" id="tab-memory">🧠 Memory</button>
+    <button class="tab-btn" data-tab="quiz" id="tab-quiz">✏️ Quiz</button>
+  </div>
+
+  <section class="content-section active" id="learn">
+    <div class="flashcards" id="school-flashcards"></div>
+  </section>
+
+  <section class="content-section" id="match">
+    <div id="school-match"></div>
+  </section>
+
+  <section class="content-section" id="memory">
+    <div id="school-memory"></div>
+  </section>
+
+  <section class="content-section" id="quiz">
+    <div id="school-quiz"></div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with ❤️ for young learners in Leipzig 🇩🇪 · Class 3 English</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    const SCHOOL_WORDS = [
+      { word: 'school bag', emoji: '🎒', german: 'Schultasche' },
+      { word: 'book', emoji: '📕', german: 'Buch' },
+      { word: 'pen', emoji: '🖊️', german: 'Stift' },
+      { word: 'pencil', emoji: '✏️', german: 'Bleistift' },
+      { word: 'coloured pencil', emoji: '🖍️', german: 'Buntstift' },
+      { word: 'pencil case', emoji: '👝', german: 'Federtasche' },
+      { word: 'rubber', emoji: '🧽', german: 'Radiergummi' },
+      { word: 'ruler', emoji: '📏', german: 'Lineal' },
+      { word: 'scissors', emoji: '✂️', german: 'Schere' },
+      { word: 'folder', emoji: '📁', german: 'Hefter' },
+      { word: 'glue stick', emoji: '🧴', german: 'Klebestift' },
+      { word: 'sharpener', emoji: '⚙️', german: 'Anspitzer' },
+      { word: 'felt pen', emoji: '🖍️', german: 'Filzstift' },
+      { word: 'board', emoji: '⬛', german: 'Tafel' },
+      { word: 'desk', emoji: '🪑', german: 'Schreibtisch' },
+      { word: 'door', emoji: '🚪', german: 'Tür' },
+      { word: 'window', emoji: '🪟', german: 'Fenster' },
+      { word: 'computer', emoji: '💻', german: 'Computer' },
+      { word: 'school', emoji: '🏫', german: 'Schule' },
+      { word: 'classroom', emoji: '🏫', german: 'Klassenzimmer' },
+      { word: 'pupils', emoji: '🧑‍🤝‍🧑', german: 'Schüler' },
+      { word: 'teacher', emoji: '👩‍🏫', german: 'Lehrer/in' },
+      { word: 'long', emoji: '📏', german: 'lang' },
+      { word: 'short', emoji: '🤏', german: 'kurz' }
+    ];
+
+    // ── Flashcards ──
+    const fcContainer = document.getElementById('school-flashcards');
+    SCHOOL_WORDS.forEach(w => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <button class="speak-btn" onclick="event.stopPropagation();speak('${w.word}')">🔊</button>
+        <div class="fc-emoji">${w.emoji}</div>
+        <div class="fc-word">${w.word}</div>
+        <div class="fc-sub">${w.german}</div>
+      `;
+      card.addEventListener('click', () => { speak(w.word); trackCardClick(); });
+      fcContainer.appendChild(card);
+    });
+
+    // ── Matching Game ──
+    const matchPairs = shuffle([...SCHOOL_WORDS]).slice(0, 8).map(w => ({
+      left: w.emoji,
+      right: w.word
+    }));
+    new MatchGame({
+      containerId: 'school-match',
+      pairs: matchPairs,
+      topic: 'school'
+    });
+
+    // ── Memory Game ──
+    const memPairs = shuffle([...SCHOOL_WORDS]).slice(0, 6).map(w => ({
+      emoji: w.emoji,
+      word: w.word
+    }));
+    new MemoryGame({
+      containerId: 'school-memory',
+      pairs: memPairs,
+      topic: 'school'
+    });
+
+    // ── Quiz ──
+    function buildSchoolQuestions() {
+      const qs = [];
+      const picked = shuffle([...SCHOOL_WORDS]).slice(0, 10);
+      picked.slice(0, 5).forEach(c => {
+        const wrongs = shuffle(SCHOOL_WORDS.filter(x => x.word !== c.word)).slice(0, 3).map(x => x.word);
+        const opts = shuffle([c.word, ...wrongs]);
+        qs.push({
+          prompt: 'What is this?',
+          question: c.emoji,
+          options: opts,
+          correct: opts.indexOf(c.word)
+        });
+      });
+      picked.slice(5, 10).forEach(c => {
+        const wrongs = shuffle(SCHOOL_WORDS.filter(x => x.german !== c.german)).slice(0, 3).map(x => x.german);
+        const opts = shuffle([c.german, ...wrongs]);
+        qs.push({
+          prompt: `What is "${c.word}" in German?`,
+          question: `${c.emoji} ${c.word}`,
+          options: opts,
+          correct: opts.indexOf(c.german)
+        });
+      });
+      return qs;
+    }
+
+    new QuizEngine({
+      containerId: 'school-quiz',
+      questions: buildSchoolQuestions(),
+      topic: 'school'
+    });
+  </script>
+</body>
+</html>

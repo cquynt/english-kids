@@ -18,18 +18,7 @@
   <header class="navbar">
     <a href="index.html" class="logo">📚 English Kids</a>
     <div class="nav-right">
-      <nav>
-        <a href="numbers.html">🔢 Numbers</a>
-        <a href="body.html">🧍 Body</a>
-        <a href="clothes.html">👕 Clothes</a>
-        <a href="hobbies.html">⚽ Hobbies</a>
-        <a href="toys.html">🧸 Toys</a>
-        <a href="colors.html">🎨 Colours</a>
-        <a href="birthday.html">🎂 Birthday</a>
-        <a href="summer.html">☀️ Summer</a>
-        <a href="family.html">👨‍👩‍👧‍👦 Family</a>
-        <a href="feelings.html">😊 Feelings</a>
-      </nav>
+      <nav id="main-nav"></nav>
       <button class="dark-toggle" id="dark-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
     </div>
   </header>
@@ -40,7 +29,7 @@
     <p>Welcome, young learner! Pick a topic below and start your English adventure. Learn new words, play games, and earn stars!</p>
     <div class="stars-summary">
       <span class="star-count">⭐</span>
-      <span>Stars earned: <strong id="total-stars">0 / 15</strong></span>
+      <span>Stars earned: <strong id="total-stars">0 / 45</strong></span>
     </div>
   </section>
 
@@ -124,6 +113,46 @@
       <p>Learn feelings words in English! Are you happy, sad, or angry?</p>
       <div class="card-progress" id="progress-feelings"></div>
       <span class="btn">How do you feel? →</span>
+    </a>
+
+    <a href="school.html" class="topic-card school-card" id="card-school">
+      <div class="card-emoji">🏫</div>
+      <h2>School</h2>
+      <p>Learn school words in English! Your backpack, books and everything else.</p>
+      <div class="card-progress" id="progress-school"></div>
+      <span class="btn">Let's Go! →</span>
+    </a>
+
+    <a href="months.html" class="topic-card months-card" id="card-months">
+      <div class="card-emoji">📅</div>
+      <h2>Months</h2>
+      <p>Learn the months of the year! January, February, March and more.</p>
+      <div class="card-progress" id="progress-months"></div>
+      <span class="btn">Learn Months! →</span>
+    </a>
+
+    <a href="days.html" class="topic-card days-card" id="card-days">
+      <div class="card-emoji">📆</div>
+      <h2>Days</h2>
+      <p>Learn the days of the week! Monday, Tuesday, Wednesday and more.</p>
+      <div class="card-progress" id="progress-days"></div>
+      <span class="btn">Learn Days! →</span>
+    </a>
+
+    <a href="seasons.html" class="topic-card seasons-card" id="card-seasons">
+      <div class="card-emoji">🌸</div>
+      <h2>Seasons</h2>
+      <p>Learn the four seasons! Spring, summer, autumn, winter.</p>
+      <div class="card-progress" id="progress-seasons"></div>
+      <span class="btn">Learn Seasons! →</span>
+    </a>
+
+    <a href="weather.html" class="topic-card weather-card" id="card-weather">
+      <div class="card-emoji">☀️</div>
+      <h2>Weather</h2>
+      <p>Learn weather words! Sunny, rainy, snowy and windy.</p>
+      <div class="card-progress" id="progress-weather"></div>
+      <span class="btn">Learn Weather! →</span>
     </a>
 
   </section>
