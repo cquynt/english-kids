@@ -62,7 +62,7 @@ const SFX = {
   }
 };
 
-// ── Speech Synthesis (Google Translate TTS) ──
+// ── Speech Synthesis (Online TTS) ──
 let currentAudio = null;
 let repeatTimeout = null;
 
@@ -76,9 +76,10 @@ function speak(text) {
     repeatTimeout = null;
   }
   
-  // tl=en-GB ensures a British English accent
+  // Google Translate APIs aggressively block cross-origin requests, resulting in ERR_BLOCKED_BY_ORB errors.
+  // Instead, we use Youdao's dictionary API which provides high-quality Oxford British English (type=1) safely.
   const encodedText = encodeURIComponent(text);
-  const url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-GB&q=${encodedText}`;
+  const url = `https://dict.youdao.com/dictvoice?audio=${encodedText}&type=1`;
   
   currentAudio = new Audio(url);
   currentAudio.play().catch(e => console.error('Audio playback failed:', e));
