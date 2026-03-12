@@ -38,7 +38,7 @@ export function speak(text: string): void {
   tryPlayUrls(sourceUrls, phrase);
 }
 
-export function speakRepeated(text: string, repeat = 3, delayMs = 1500): void {
+export function speakRepeated(text: string, repeat = 3, delayMs = 2000): void {
   if (typeof window === "undefined") return;
 
   const phrase = text.trim();
