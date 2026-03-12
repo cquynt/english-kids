@@ -1,6 +1,8 @@
-cloudflare_api_token = "xxxxx"
-zone_name            = "giamgia.de"
-record_name          = "app"
-elb_hostname         = "a601d585a58b64e71b36e631c97759dc-1702538151.eu-central-1.elb.amazonaws.com"
-proxied              = false
-ttl                  = 300
+zone_name         = "giamgia.de"
+subdomain         = "english"
+aws_region        = "eu-central-1"
+aws_bucket_name   = "english-kids-static-prod"
+build_output_path = "../web/out"
+upload_assets     = true
+proxied           = true
+ttl               = 1

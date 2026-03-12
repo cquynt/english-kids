@@ -1,0 +1,30 @@
+@import "./legacy-style.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.page-shell {
+  min-height: 100vh;
+}
+
+.btn.disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.navbar nav a.pending {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.topic-card .migration-pill {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--clr-text-light);
+}

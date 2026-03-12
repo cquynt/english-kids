@@ -1,33 +1,68 @@
-# Cloudflare DNS for englisch.giamgia.de -> EKS ELB
+# Terraform for english.giamgia.de (S3 static hosting + Cloudflare DNS)
+
+This Terraform stack now does 3 jobs:
+
+1. Creates an S3 bucket configured for static website hosting.
+2. Uploads the built frontend files from `../web/out` to S3.
+3. Creates/updates the Cloudflare DNS record for `english.giamgia.de`.
 
 ## Prerequisites
-- Terraform >= 1.6
-- Cloudflare API Token with `Zone:DNS:Edit` on your zone `giamgia.de`
-- ELB hostname from your EKS ingress/service (e.g. `a601d585a58b64e71b36e631c97759dc-1702538151.eu-central-1.elb.amazonaws.com`)
 
-## Usage
-1) Copy example vars:
+- Terraform >= 1.6
+- AWS credentials configured in shell (`AWS_PROFILE` or env vars)
+- Cloudflare API token with `Zone:DNS:Edit` for zone `giamgia.de`
+- Frontend built first so `../web/out` exists
+
+## Variables
+
+Set Cloudflare token via environment variable:
+
 ```bash
-cat > terraform.tfvars <<'EOF'
-cloudflare_api_token = "CF_API_TOKEN"
-zone_name            = "giamgia.de"
-record_name          = "app"            # results in englisch.giamgia.de
-elb_hostname         = "<ELB_HOSTNAME>" # replace with current ELB DNS name
-proxied              = false            # keep false for LB; true if you want CF proxy
-ttl                  = 300
-EOF
+export TF_VAR_cloudflare_api_token="<CLOUDFLARE_TOKEN>"
 ```
-2) Init + apply:
+
+Example `terraform.tfvars`:
+
+```hcl
+zone_name         = "giamgia.de"
+subdomain         = "english"
+aws_region        = "eu-central-1"
+aws_bucket_name   = "english-kids-static-prod"
+build_output_path = "../web/out"
+upload_assets     = true
+proxied           = true
+ttl               = 1
+```
+
+## Deployment flow
+
+1. Build frontend static output:
+
 ```bash
+cd ../web
+npm install
+npm run build
+```
+
+2. Apply infrastructure + upload artifacts:
+
+```bash
+cd ../0.englisch.giamgia.de
 terraform init
+terraform fmt -recursive
+terraform validate
 terraform plan
 terraform apply
 ```
-3) Verify:
+
+3. Verify:
+
 ```bash
-nslookup englisch.giamgia.de
+dig english.giamgia.de +short
+curl -I http://english.giamgia.de
 ```
 
 ## Notes
-- The record is a CNAME pointing to the ELB hostname. When ELB changes, update `elb_hostname` and re-`apply`.
-- Keep `proxied=false` if using AWS-managed certs/ALB/ingress; you can set `true` to terminate TLS at Cloudflare if desired.
+
+- This implementation points Cloudflare CNAME to the S3 website endpoint.
+- S3 website hosting requires public-read object access. If you need a private origin and stronger security posture, migrate to CloudFront + OAC in the next phase.
