@@ -7,19 +7,6 @@ function fallbackSpeak(text: string): void {
   window.speechSynthesis.speak(utterance);
 }
 
-function tryPlayUrls(urls: string[], text: string, index = 0): void {
-  if (index >= urls.length) {
-    fallbackSpeak(text);
-    return;
-  }
-
-  const audio = new Audio(urls[index]);
-  const next = () => tryPlayUrls(urls, text, index + 1);
-
-  audio.addEventListener("error", next, { once: true });
-  void audio.play().catch(next);
-}
-
 export function speak(text: string): void {
   if (typeof window === "undefined") return;
 
@@ -27,15 +14,18 @@ export function speak(text: string): void {
   if (!phrase) return;
 
   const encodedText = encodeURIComponent(phrase);
+  const youdaoUrl = `https://dict.youdao.com/dictvoice?audio=${encodedText}&type=1`;
+  const audio = new Audio(youdaoUrl);
 
-  // Keep legacy-compatible Youdao first, then try Google TTS for phrases
-  // that Youdao intermittently fails with (HTTP 500), then local synthesis.
-  const sourceUrls = [
-    `https://dict.youdao.com/dictvoice?audio=${encodedText}&type=1`,
-    `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=en&client=tw-ob`,
-  ];
+  let didFallback = false;
+  const handleFallback = () => {
+    if (didFallback) return;
+    didFallback = true;
+    fallbackSpeak(phrase);
+  };
 
-  tryPlayUrls(sourceUrls, phrase);
+  audio.addEventListener("error", handleFallback, { once: true });
+  void audio.play().catch(handleFallback);
 }
 
 export function speakRepeated(text: string, repeat = 3, delayMs = 2000): void {
