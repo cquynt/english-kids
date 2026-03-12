@@ -58,7 +58,7 @@ const SFX = {
           o.stop(ctx.currentTime + i * 0.15 + 0.3);
         });
       }
-    } catch(e) { /* Audio not supported */ }
+    } catch (e) { /* Audio not supported */ }
   }
 };
 
@@ -75,18 +75,18 @@ function speak(text) {
     clearTimeout(repeatTimeout);
     repeatTimeout = null;
   }
-  
+
   // Google Translate APIs aggressively block cross-origin requests, resulting in ERR_BLOCKED_BY_ORB errors.
   // Instead, we use Youdao's dictionary API which provides high-quality Oxford British English (type=1) safely.
   const encodedText = encodeURIComponent(text);
   const url = `https://dict.youdao.com/dictvoice?audio=${encodedText}&type=1`;
-  
+
   currentAudio = new Audio(url);
   let playCount = 1;
   const maxPlays = 3; // Lặp lại để nghe tổng cộng 3 lần
 
   currentAudio.play().catch(e => console.error('Audio playback failed:', e));
-  
+
   currentAudio.onended = () => {
     if (playCount < maxPlays) {
       playCount++;
@@ -214,7 +214,7 @@ function getStarCount(topic) {
 }
 
 // ── All Topics List ──
-const ALL_TOPICS = ['numbers', 'body', 'clothes', 'hobbies', 'toys', 'colors', 'birthday', 'summer', 'family', 'feelings', 'school', 'months', 'days', 'seasons', 'weather'];
+const ALL_TOPICS = ['numbers', 'body', 'clothes', 'hobbies', 'toys', 'colors', 'birthday', 'summer', 'family', 'feelings', 'school', 'months', 'days', 'seasons', 'weather', 'home'];
 
 // ── Navigation Menu Data ──
 const NAV_ITEMS = [
@@ -232,7 +232,8 @@ const NAV_ITEMS = [
   { path: 'months.html', emoji: '📅', text: 'Months' },
   { path: 'days.html', emoji: '📆', text: 'Days' },
   { path: 'seasons.html', emoji: '🌸', text: 'Seasons' },
-  { path: 'weather.html', emoji: '☀️', text: 'Weather' }
+  { path: 'weather.html', emoji: '☀️', text: 'Weather' },
+  { path: 'home.html', emoji: '🏠', text: 'Home' }
 ];
 
 function renderNavigation() {
@@ -249,14 +250,16 @@ function renderNavigation() {
 
 // ── Badge System ──
 const BADGES = [
-  { id: 'first_quiz',    icon: '🎯', name: 'First Quiz',     condition: () => ALL_TOPICS.some(t => getScore(t) > 0) },
-  { id: 'word_learner',  icon: '📚', name: 'Word Learner',   condition: () => (localStorage.getItem('ekids_cards_clicked') || 0) >= 10 },
-  { id: 'streak_3',      icon: '🔥', name: '3 Streak',       condition: () => (parseInt(localStorage.getItem('ekids_best_streak') || '0', 10)) >= 3 },
-  { id: 'memory_master', icon: '🧠', name: 'Memory Pro',     condition: () => localStorage.getItem('ekids_memory_win') === 'true' },
-  { id: 'perfect',       icon: '💯', name: 'Perfect Score',  condition: () => {
-    return ALL_TOPICS.some(t => { const s = getScore(t); const tot = getTopicTotal(t); return tot > 0 && s === tot; });
-  }},
-  { id: 'all_topics',    icon: '🏆', name: 'All Topics',     condition: () => ALL_TOPICS.every(t => getScore(t) > 0) },
+  { id: 'first_quiz', icon: '🎯', name: 'First Quiz', condition: () => ALL_TOPICS.some(t => getScore(t) > 0) },
+  { id: 'word_learner', icon: '📚', name: 'Word Learner', condition: () => (localStorage.getItem('ekids_cards_clicked') || 0) >= 10 },
+  { id: 'streak_3', icon: '🔥', name: '3 Streak', condition: () => (parseInt(localStorage.getItem('ekids_best_streak') || '0', 10)) >= 3 },
+  { id: 'memory_master', icon: '🧠', name: 'Memory Pro', condition: () => localStorage.getItem('ekids_memory_win') === 'true' },
+  {
+    id: 'perfect', icon: '💯', name: 'Perfect Score', condition: () => {
+      return ALL_TOPICS.some(t => { const s = getScore(t); const tot = getTopicTotal(t); return tot > 0 && s === tot; });
+    }
+  },
+  { id: 'all_topics', icon: '🏆', name: 'All Topics', condition: () => ALL_TOPICS.every(t => getScore(t) > 0) },
 ];
 
 function unlockBadge(id) {
@@ -622,7 +625,7 @@ class MemoryGame {
     const mins = Math.floor(elapsed / 60);
     const secs = elapsed % 60;
     const rating = this.moves <= this.pairs.length + 2 ? '🌟🌟🌟' :
-                   this.moves <= this.pairs.length * 2 ? '🌟🌟' : '🌟';
+      this.moves <= this.pairs.length * 2 ? '🌟🌟' : '🌟';
 
     this.container.innerHTML = `
       <div class="results">
@@ -657,20 +660,21 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateHomeProgress() {
   const topics = [
     { key: 'numbers', cardId: 'card-numbers' },
-    { key: 'body',    cardId: 'card-body' },
+    { key: 'body', cardId: 'card-body' },
     { key: 'clothes', cardId: 'card-clothes' },
     { key: 'hobbies', cardId: 'card-hobbies' },
-    { key: 'toys',    cardId: 'card-toys' },
-    { key: 'colors',  cardId: 'card-colors' },
-    { key: 'birthday',cardId: 'card-birthday' },
-    { key: 'summer',  cardId: 'card-summer' },
-    { key: 'family',  cardId: 'card-family' },
-    { key: 'feelings',cardId: 'card-feelings' },
-    { key: 'school',  cardId: 'card-school' },
-    { key: 'months',  cardId: 'card-months' },
-    { key: 'days',    cardId: 'card-days' },
+    { key: 'toys', cardId: 'card-toys' },
+    { key: 'colors', cardId: 'card-colors' },
+    { key: 'birthday', cardId: 'card-birthday' },
+    { key: 'summer', cardId: 'card-summer' },
+    { key: 'family', cardId: 'card-family' },
+    { key: 'feelings', cardId: 'card-feelings' },
+    { key: 'school', cardId: 'card-school' },
+    { key: 'months', cardId: 'card-months' },
+    { key: 'days', cardId: 'card-days' },
     { key: 'seasons', cardId: 'card-seasons' },
     { key: 'weather', cardId: 'card-weather' },
+    { key: 'home', cardId: 'card-home' },
   ];
 
   let totalStars = 0;
@@ -697,7 +701,7 @@ function updateHomeProgress() {
     }
   });
 
-  // Update total stars (15 topics × 3 stars = 45)
+  // Update total stars based on current topic count.
   const starsEl = document.getElementById('total-stars');
-  if (starsEl) starsEl.textContent = `${totalStars} / 45`;
+  if (starsEl) starsEl.textContent = `${totalStars} / ${topics.length * 3}`;
 }
