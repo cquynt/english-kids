@@ -37,3 +37,17 @@ export function speak(text: string): void {
 
   tryPlayUrls(sourceUrls, phrase);
 }
+
+export function speakRepeated(text: string, repeat = 3, delayMs = 1500): void {
+  if (typeof window === "undefined") return;
+
+  const phrase = text.trim();
+  if (!phrase) return;
+
+  const times = Math.max(1, repeat);
+  for (let i = 0; i < times; i += 1) {
+    window.setTimeout(() => {
+      speak(phrase);
+    }, i * delayMs);
+  }
+}

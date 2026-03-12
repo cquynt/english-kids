@@ -9,7 +9,7 @@ import {
   getStorageNumber,
   setStorageNumber,
 } from "@/lib/game";
-import { speak } from "@/lib/tts";
+import { speakRepeated } from "@/lib/tts";
 
 type TabId = "learn" | "match" | "memory" | "quiz";
 
@@ -233,7 +233,7 @@ export function TopicTabs({ topic }: { topic: Topic }) {
               <div
                 key={item.id}
                 className="flashcard"
-                onClick={() => speak(item.word)}
+                onClick={() => speakRepeated(item.word, 3)}
                 role="button"
                 tabIndex={0}
               >
@@ -241,7 +241,7 @@ export function TopicTabs({ topic }: { topic: Topic }) {
                   className="speak-btn"
                   onClick={(event) => {
                     event.stopPropagation();
-                    speak(item.word);
+                    speakRepeated(item.word, 3);
                   }}
                   type="button"
                 >
